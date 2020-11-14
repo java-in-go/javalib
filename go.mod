@@ -1,3 +1,3 @@
-module java-in-go
+module javalib
 
 go 1.14
