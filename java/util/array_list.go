@@ -39,16 +39,32 @@ func (a *ArrayList) IsEmpty() bool {
 	return a.size == 0
 }
 
-func (a *ArrayList) Contains(obj interface{}) bool {
-	return a.IndexOf(obj)>=0
+func (a *ArrayList) Contains(obj *interface{}) bool {
+	return a.IndexOf(obj) >= 0
 }
 
-func (a *ArrayList) Add(obj interface{}) bool {
-	panic("implement me")
+func (a *ArrayList) Add(obj *interface{}) bool {
+	a.elementData = append(a.elementData, obj)
+	a.size++
+	return true
 }
 
-func (a *ArrayList) Remove(index int) bool {
-	panic("implement me")
+func (a *ArrayList) Remove(index int) *interface{} {
+	a.rangeCheck(index)
+	oldValue := a.elementData[index]
+	numMoved := a.size - index - 1
+	if numMoved > 1 {
+
+	}
+	return oldValue
+
+}
+
+func (a *ArrayList) rangeCheck(index int) {
+	if index >= a.size {
+		panic("IndexOutOfBoundsException Index: " + strconv.Itoa(index) + ", Size: " + strconv.Itoa(a.size))
+	}
+
 }
 
 func (a *ArrayList) Clear() {
@@ -59,10 +75,10 @@ func (a *ArrayList) Get(index int) {
 	panic("implement me")
 }
 
-func (a *ArrayList) Set(index int, obj interface{}) {
+func (a *ArrayList) Set(index int, obj *interface{}) {
 	panic("implement me")
 }
 
-func (a *ArrayList) IndexOf(obj interface{})  int{
+func (a *ArrayList) IndexOf(obj *interface{}) int {
 	panic("implement me")
 }
