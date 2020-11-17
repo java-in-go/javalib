@@ -60,7 +60,6 @@ func TestArrayList_Clear(t *testing.T) {
 		name   string
 		fields fields
 	}{
-		// TODO: Add test cases.
 		{name: "1", fields: fields{}},
 		{name: "2", fields: fields{}},
 	}
@@ -96,7 +95,6 @@ func TestArrayList_Contains(t *testing.T) {
 		args   args
 		want   bool
 	}{
-		// TODO: Add test cases.
 		{name: "EmptyList1", fields: fields{0, nil}, args: args{nil}, want: false},
 		{name: "EmptyList2", fields: fields{0, nil}, args: args{nil}, want: false},
 		{name: "NotEmptyList2", fields: fields{list1.size, list1.elementData}, args: args{"2"}, want: false},
@@ -134,7 +132,6 @@ func TestArrayList_Get(t *testing.T) {
 		args   args
 		want   interface{}
 	}{
-		// TODO: Add test cases.
 		/*{
 			name:   "1",
 			fields: fields{0,nil},
@@ -184,7 +181,6 @@ func TestArrayList_IndexOf(t *testing.T) {
 		args   args
 		want   int
 	}{
-		// TODO: Add test cases.
 		{
 			name:   "1",
 			fields: fields{0, nil},
@@ -231,7 +227,6 @@ func TestArrayList_IsEmpty(t *testing.T) {
 		fields fields
 		want   bool
 	}{
-		// TODO: Add test cases.
 		{
 			name:   "empty",
 			fields: fields{0, nil},
@@ -274,7 +269,6 @@ func TestArrayList_Remove(t *testing.T) {
 		args   args
 		want   interface{}
 	}{
-		// TODO: Add test cases.
 		/*{
 			name:   "1",
 			fields: fields{0, nil},
@@ -329,7 +323,6 @@ func TestArrayList_Set(t *testing.T) {
 		args   args
 		want   interface{}
 	}{
-		// TODO: Add test cases.
 		{
 			name:   "1",
 			fields: fields{list1.size, list1.elementData},
