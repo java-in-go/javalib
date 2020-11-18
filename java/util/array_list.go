@@ -5,9 +5,9 @@ import (
 	"strconv"
 )
 
-const DEFAULT_CAPACITY = 10
+const DefaultCapacity = 10
 
-var EMPTY_ELEMENTDATA []interface{}
+var EmptyElementData []interface{}
 
 type ArrayList struct {
 	size        int
@@ -17,7 +17,7 @@ type ArrayList struct {
 func NewArrayList() *ArrayList {
 	return &ArrayList{
 		size:        0,
-		elementData: EMPTY_ELEMENTDATA,
+		elementData: EmptyElementData,
 	}
 }
 func NewArrayListCap(initialCapacity int) *ArrayList {
@@ -25,7 +25,7 @@ func NewArrayListCap(initialCapacity int) *ArrayList {
 	if initialCapacity > 0 {
 		arrayList.elementData = make([]interface{}, 0, initialCapacity)
 	} else if initialCapacity == 0 {
-		arrayList.elementData = EMPTY_ELEMENTDATA
+		arrayList.elementData = EmptyElementData
 	} else {
 		panic("Illegal Capacity: " + strconv.Itoa(initialCapacity))
 	}
@@ -45,16 +45,16 @@ func (a *ArrayList) Contains(obj interface{}) bool {
 }
 
 func (a *ArrayList) Add(obj interface{}) bool {
-	a.ensureCapacityInternal(a.size + 1)
+	a.ensureExplicitCapacity(a.ensureCapacityInternal(a.size + 1))
 	a.elementData = append(a.elementData, obj)
 	a.size++
 	return true
 }
 func (a *ArrayList) ensureCapacityInternal(index int) int {
 	elementData := &a.elementData
-	emptyElementData := &EMPTY_ELEMENTDATA
+	emptyElementData := &EmptyElementData
 	if elementData == emptyElementData {
-		return MaxInt(DEFAULT_CAPACITY, index)
+		return MaxInt(DefaultCapacity, index)
 	}
 	return index
 }

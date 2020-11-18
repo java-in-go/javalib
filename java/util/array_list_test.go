@@ -348,12 +348,28 @@ func TestArrayList_Size(t *testing.T) {
 		size        int
 		elementData []interface{}
 	}
+	type args struct {
+		index int
+	}
+	list1 := NewArrayList()
+	list1.Add(args{1})
+	list1.Add(args{2})
 	tests := []struct {
 		name   string
 		fields fields
 		want   int
 	}{
-		// TODO: Add test cases.
+
+		{
+			name:   "1",
+			fields: fields{0, nil},
+			want:   0,
+		},
+		{
+			name:   "2",
+			fields: fields{list1.Size(), list1.elementData},
+			want:   2,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -383,6 +399,30 @@ func TestArrayList_ensureCapacityInternal(t *testing.T) {
 		want   int
 	}{
 		// TODO: Add test cases.
+		{
+			name:   "1",
+			fields: fields{0, EmptyElementData},
+			args:   args{1},
+			want:   10,
+		},
+		{
+			name:   "2",
+			fields: fields{0, EmptyElementData},
+			args:   args{10},
+			want:   10,
+		},
+		{
+			name:   "3",
+			fields: fields{0, EmptyElementData},
+			args:   args{11},
+			want:   11,
+		},
+		{
+			name:   "4",
+			fields: fields{0, EmptyElementData},
+			args:   args{-11},
+			want:   10,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -409,8 +449,27 @@ func TestArrayList_ensureExplicitCapacity(t *testing.T) {
 		name   string
 		fields fields
 		args   args
+		want   int
 	}{
 		// TODO: Add test cases.
+		{
+			name:   "1",
+			fields: fields{0, nil},
+			args:   args{1},
+			want:   1,
+		},
+		{
+			name:   "2",
+			fields: fields{10, nil},
+			args:   args{2},
+			want:   2,
+		},
+		{
+			name:   "3",
+			fields: fields{1, nil},
+			args:   args{1},
+			want:   1,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -418,7 +477,11 @@ func TestArrayList_ensureExplicitCapacity(t *testing.T) {
 				size:        tt.fields.size,
 				elementData: tt.fields.elementData,
 			}
-			fmt.Println(a)
+			a.ensureExplicitCapacity(tt.args.minCapacity)
+			got := cap(a.elementData)
+			if got != tt.want {
+				t.Errorf("ensureExplicitCapacity() = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }
@@ -479,7 +542,8 @@ func TestNewArrayList(t *testing.T) {
 		name string
 		want *ArrayList
 	}{
-		// TODO: Add test cases.
+		{name: "1", want: NewArrayList()},
+		{name: "2", want: NewArrayList()},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -499,7 +563,9 @@ func TestNewArrayListCap(t *testing.T) {
 		args args
 		want *ArrayList
 	}{
-		// TODO: Add test cases.
+		{name: "1", args: args{
+			1,
+		}, want: NewArrayListCap(1)},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

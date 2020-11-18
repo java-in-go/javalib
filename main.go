@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/list"
 	"fmt"
 )
 
@@ -9,6 +10,17 @@ func main() {
 	//list.PushBack(1)
 	//testSlice()
 	testSliceClear()
+}
+
+func testList() {
+	l := list.New()
+	//list.Element{
+	//
+	//}
+	//	list2.()
+	l.PushBack(1)
+	l.InsertAfter(2, 1)
+
 }
 
 func testSliceClear() {
