@@ -25,12 +25,14 @@ func (a *LinkedList) Add(obj interface{}) bool {
 
 func (a *LinkedList) Remove(index int) interface{} {
 	//a.list.Remove()
+	panic("implement me")
 }
 
 func (a *LinkedList) RemoveObj(obj interface{}) bool {
 	if obj == nil {
 
 	}
+	panic("implement me")
 }
 
 func checkElementIndex(index int) {

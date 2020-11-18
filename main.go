@@ -3,13 +3,22 @@ package main
 import (
 	"container/list"
 	"fmt"
+	"javalib/java"
 )
 
 func main() {
 	//list := list.New()
 	//list.PushBack(1)
 	//testSlice()
-	testSliceClear()
+	//testSliceClear()
+	testJavalib()
+}
+
+func testJavalib() {
+	l1 := java.NewArrayList()
+	l1.Add(1)
+	l1.Add(2)
+	fmt.Println(l1.Size())
 }
 
 func testList() {
@@ -19,7 +28,7 @@ func testList() {
 	//}
 	//	list2.()
 	l.PushBack(1)
-	l.InsertAfter(2, 1)
+	//l.InsertAfter(2, 1)
 
 }
 
