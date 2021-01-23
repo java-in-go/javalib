@@ -1,9 +1,6 @@
 package util
 
 type List interface {
-
-	//func Size() int
-
 	Size() int
 	IsEmpty() bool
 	Contains(obj interface{}) bool
@@ -17,4 +14,9 @@ type List interface {
 	Get(index int) interface{}
 	Set(index int, obj interface{}) interface{}
 	IndexOf(obj interface{}) int
+
+	ForEach(f func(value interface{}))
+	ForEachIndex(f func(index int, value interface{}))
+	Map(f func(value interface{}) interface{}) List
+	Reduce(f func(v1 interface{}, v2 interface{}) interface{}) interface{}
 }

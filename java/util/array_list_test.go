@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 )
@@ -233,7 +232,7 @@ func TestArrayList_IsEmpty(t *testing.T) {
 			want:   true,
 		},
 		{
-			name:   "notempty",
+			name:   "notEmpty",
 			fields: fields{list1.size, list1.elementData},
 			want:   false,
 		},
@@ -260,14 +259,14 @@ func TestArrayList_Remove(t *testing.T) {
 		index int
 	}
 	list1 := NewArrayList()
-	list1.Add(args{1})
-	list1.Add(args{2})
-	t.Logf("size:%d,len:%d", list1.size, len(list1.elementData))
+	list1.Add(1)
+	list1.Add(2)
+	list1.Add(3)
+	//t.Logf("size:%d,len:%d", list1.size, len(list1.elementData))
 	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   interface{}
+		name string
+		args args
+		want interface{}
 	}{
 		/*{
 			name:   "1",
@@ -275,32 +274,26 @@ func TestArrayList_Remove(t *testing.T) {
 			args:   args{1},
 			want:   nil,
 		},*/{
-			name:   "2",
-			fields: fields{list1.size, list1.elementData},
-			args:   args{1},
-			want:   args{2},
+			name: "2",
+			args: args{1},
+			want: 2,
 		}, {
-			name:   "3",
-			fields: fields{list1.size, list1.elementData},
-			args:   args{0},
-			want:   args{1},
+			name: "3",
+			args: args{0},
+			want: 1,
 		}, {
-			name:   "4",
-			fields: fields{list1.size, list1.elementData},
-			args:   args{0},
-			want:   args{1},
+			name: "4",
+			args: args{0},
+			want: 3,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &ArrayList{
-				size:        tt.fields.size,
-				elementData: tt.fields.elementData,
-			}
+			a := list1
 			if got := a.Remove(tt.args.index); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Remove() = %v, want %v", got, tt.want)
 			}
-			t.Logf("size:%d,len:%d", a.size, len(a.elementData))
+			//t.Logf("size:%d,len:%d", a.size, len(a.elementData))
 		})
 	}
 }
@@ -398,7 +391,6 @@ func TestArrayList_ensureCapacityInternal(t *testing.T) {
 		args   args
 		want   int
 	}{
-		// TODO: Add test cases.
 		{
 			name:   "1",
 			fields: fields{0, EmptyElementData},
@@ -451,7 +443,6 @@ func TestArrayList_ensureExplicitCapacity(t *testing.T) {
 		args   args
 		want   int
 	}{
-		// TODO: Add test cases.
 		{
 			name:   "1",
 			fields: fields{0, nil},
@@ -499,7 +490,11 @@ func TestArrayList_rangeCheck(t *testing.T) {
 		fields fields
 		args   args
 	}{
-		// TODO: Add test cases.
+		{
+			name:   "1",
+			fields: fields{2, nil},
+			args:   args{1},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -507,32 +502,7 @@ func TestArrayList_rangeCheck(t *testing.T) {
 				size:        tt.fields.size,
 				elementData: tt.fields.elementData,
 			}
-			fmt.Println(a)
-		})
-	}
-}
-
-func TestMaxInt(t *testing.T) {
-	type args struct {
-		x int
-		y int
-	}
-	tests := []struct {
-		name string
-		args args
-		want int
-	}{
-		// TODO: Add test cases.
-		{name: "1,2", args: args{1, 2}, want: 2},
-		{name: "5,5", args: args{5, 5}, want: 5},
-		{name: "5,2", args: args{5, 2}, want: 5},
-		{name: "-1,0", args: args{-1, 0}, want: 0},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := MaxInt(tt.args.x, tt.args.y); got != tt.want {
-				t.Errorf("MaxInt() = %v, want %v", got, tt.want)
-			}
+			a.rangeCheck(tt.args.index)
 		})
 	}
 }
@@ -558,20 +528,247 @@ func TestNewArrayListCap(t *testing.T) {
 	type args struct {
 		initialCapacity int
 	}
+
 	tests := []struct {
 		name string
 		args args
 		want *ArrayList
 	}{
-		{name: "1", args: args{
-			1,
-		}, want: NewArrayListCap(1)},
+		{name: "1", args: args{1}, want: NewArrayListCap(1)},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := NewArrayListCap(tt.args.initialCapacity); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewArrayListCap() = %v, want %v", got, tt.want)
 			}
+		})
+	}
+}
+
+func TestArrayList_ForEach(t *testing.T) {
+	type fields struct {
+		size        int
+		elementData []interface{}
+	}
+	type args struct {
+		f func(value interface{})
+	}
+	l := NewArrayList()
+	l.Add("1")
+	l.Add("4")
+	l.Add("4")
+	l.Add("5")
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+	}{
+		{
+			name:   "1",
+			fields: fields{l.size, l.elementData},
+			args: args{func(value interface{}) {
+				//v := value.(string)
+				//print(v)
+			}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &ArrayList{
+				size:        tt.fields.size,
+				elementData: tt.fields.elementData,
+			}
+			a.ForEach(tt.args.f)
+		})
+	}
+}
+
+func TestArrayList_ForEachIndex(t *testing.T) {
+	type fields struct {
+		size        int
+		elementData []interface{}
+	}
+	type args struct {
+		f func(index int, value interface{})
+	}
+	l := NewArrayList()
+	l.Add(0)
+	l.Add(1)
+	l.Add(2)
+	l.Add(3)
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+	}{
+		{
+			name:   "1",
+			fields: fields{l.size, l.elementData},
+			args: args{func(index int, value interface{}) {
+				if index != value.(int) {
+					t.Errorf("ForEachIndex() = %v, want %v", index, value.(int))
+				}
+			}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &ArrayList{
+				size:        tt.fields.size,
+				elementData: tt.fields.elementData,
+			}
+			a.ForEachIndex(tt.args.f)
+		})
+	}
+}
+
+func TestArrayList_Map(t *testing.T) {
+	type fields struct {
+		size        int
+		elementData []interface{}
+	}
+	type args struct {
+		f func(value interface{}) interface{}
+	}
+	l := NewArrayList()
+	l.Add(0)
+	l.Add(1)
+	l.Add(2)
+	l.Add(3)
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   List
+	}{
+		{
+			name:   "1",
+			fields: fields{l.size, l.elementData},
+			args: args{f: func(value interface{}) interface{} {
+				return value.(int) * 1
+			}},
+			want: l,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &ArrayList{
+				size:        tt.fields.size,
+				elementData: tt.fields.elementData,
+			}
+			if got := a.Map(tt.args.f); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Map() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestArrayList_Reduce(t *testing.T) {
+	type fields struct {
+		size        int
+		elementData []interface{}
+	}
+	type args struct {
+		f func(interface{}, interface{}) interface{}
+	}
+	l := NewArrayList()
+	l.Add(0)
+	l.Add(1)
+	l.Add(2)
+	l.Add(3)
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   interface{}
+	}{
+		{
+			name:   "1",
+			fields: fields{l.size, l.elementData},
+			args: args{f: func(v1 interface{}, v2 interface{}) interface{} {
+				return v1.(int) + v2.(int)
+			}},
+			want: 6,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &ArrayList{
+				size:        tt.fields.size,
+				elementData: tt.fields.elementData,
+			}
+			if got := a.Reduce(tt.args.f); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Reduce() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestArrayList_RemoveObj(t *testing.T) {
+	type fields struct {
+		size        int
+		elementData []interface{}
+	}
+	type args struct {
+		obj interface{}
+	}
+	l := NewArrayList()
+	l.Add(0)
+	l.Add(1)
+	l.Add(2)
+	l.Add(3)
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   bool
+	}{
+		{
+			name:   "1",
+			fields: fields{l.size, l.elementData},
+			args:   args{3},
+			want:   true,
+		},
+		{
+			name:   "1",
+			fields: fields{l.size, l.elementData},
+			args:   args{4},
+			want:   false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &ArrayList{
+				size:        tt.fields.size,
+				elementData: tt.fields.elementData,
+			}
+			if got := a.RemoveObj(tt.args.obj); got != tt.want {
+				t.Errorf("RemoveObj() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestArrayList_initCapacity(t *testing.T) {
+	type fields struct {
+		size        int
+		elementData []interface{}
+	}
+	tests := []struct {
+		name   string
+		fields fields
+	}{
+		{name: "1", fields: fields{
+			0, nil,
+		}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &ArrayList{
+				size:        tt.fields.size,
+				elementData: tt.fields.elementData,
+			}
+			a.initCapacity()
 		})
 	}
 }
